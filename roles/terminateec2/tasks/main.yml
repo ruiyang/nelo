@@ -1,0 +1,6 @@
+---
+  - name: terminate ec2 instance
+    local_action:
+      module: ec2
+      state: 'absent'
+      instance_ids: "{{ terminated_instance_id }}"

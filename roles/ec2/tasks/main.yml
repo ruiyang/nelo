@@ -1,0 +1,23 @@
+---
+
+  - name: create ubuntu instance
+    local_action:
+      module: ec2
+      keypair: ladevs
+      instance_type: "{{ instance_type }}"
+      image: ami-3d128f07
+      wait: yes
+      vpc_subnet_id: "{{ subnet_id }}"
+      group_id: "{{ security_group_id }}"
+      count: 1
+    register: ec2
+
+  - debug: msg="ID is {{ ec2.instances[0] }}"
+  - debug: msg="ID is {{ ec2.instances[0].id }}"
+  - debug: msg="Private IP is {{ ec2.instances[0].private_ip }}"
+
+  - name: Wait for SSH to come up
+    local_action: wait_for host={{ ec2.instances[0].private_ip }} port=22 delay=30 timeout=320 state=started
+
+  - name: add host
+    local_action: add_host hostname={{ ec2.instances[0].private_ip }} groups={{ group_name }}

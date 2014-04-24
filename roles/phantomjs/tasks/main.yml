@@ -1,0 +1,23 @@
+---
+- name: install phantomjs dependency
+  sudo: True
+  apt: name={{item}} pkg=fontconfig
+  with_items:
+    - libfreetype6
+    - fontconfig
+
+- name: Download phantomjs
+  get_url: url={{ phantomjs_url }} dest=/tmp/phantomjs-{{ phantomjs_version }}.tar.bz2
+
+- name: Extract phantomjs
+  sudo: True
+  command: tar -xvjf /tmp/phantomjs-{{ phantomjs_version }}.tar.bz2 -C /usr/local/share
+
+- name: Create link for phantomjs
+  command: $item chdir=/usr/local/share
+  sudo: True
+  with_items:
+    - rm -rf /usr/local/share/phantomjs  /usr/local/bin/phantomjs /usr/bin/phantomjs
+    - ln -s /usr/local/share/phantomjs-{{ phantomjs_version }}-linux-x86_64/bin/phantomjs /usr/local/share/phantomjs
+    - sudo ln -s /usr/local/share/phantomjs-{{ phantomjs_version }}-linux-x86_64/bin/phantomjs /usr/local/bin/phantomjs
+    - sudo ln -s /usr/local/share/phantomjs-{{ phantomjs_version }}-linux-x86_64/bin/phantomjs /usr/bin/phantomjs

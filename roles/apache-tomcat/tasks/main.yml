@@ -1,0 +1,16 @@
+---
+
+- name: Download Apache Tomcat
+  get_url: url=http://apache.mirror.serversaustralia.com.au/tomcat/tomcat-7/v{{tomcat_version}}/bin/apache-tomcat-{{tomcat_version}}.tar.gz dest=/tmp/apache-tomcat-{{tomcat_version}}.tar.gz
+
+- name: Extract Apache Tomcat
+  sudo: true
+  command: tar -zxf /tmp/apache-tomcat-{{tomcat_version}}.tar.gz -C /opt creates=/opt/apache-tomcat-{{tomcat_version}}
+
+- name: Symlink Apache Tomcat
+  sudo: True
+  file: src=/opt/apache-tomcat-{{tomcat_version}} dest=/usr/share/tomcat state=link
+
+- name: Provide environment configuration
+  sudo: True
+  template: src=../../../templates/apache-tomcat/bin/setenv.sh dest=/usr/share/tomcat/bin/setenv.sh owner=root group=root mode=0744

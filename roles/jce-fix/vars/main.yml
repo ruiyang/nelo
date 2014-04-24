@@ -1,0 +1,3 @@
+---
+  JCE_US_EXPORT_POLICY: https://essentials.accounting.build.s3.amazonaws.com/US_export_policy.jar
+  JCE_LOCAL_POLICY: https://essentials.accounting.build.s3.amazonaws.com/local_policy.jar

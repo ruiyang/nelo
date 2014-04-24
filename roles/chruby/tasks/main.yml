@@ -1,0 +1,22 @@
+---
+
+- name: Install chruby dependencies
+  apt: name={{item}} state=latest update_cache=yes
+  sudo: yes
+  with_items:
+    - build-essential
+
+- name: Download chruby
+  get_url: url=https://github.com/postmodern/chruby/archive/v0.3.7.tar.gz dest=/tmp/chruby-0.3.7.tar.gz
+
+- name: Extract chruby
+  command: tar -zxf /tmp/chruby-0.3.7.tar.gz -C /tmp creates=/tmp/chruby-0.3.7
+
+- name: Make and install chruby
+  sudo: True
+  command: make install chdir=/tmp/chruby-0.3.7
+
+- name: Enable chruby
+  sudo: True
+  lineinfile: create=yes dest=/etc/profile.d/chruby.sh regexp='chruby.sh$'  line='source /usr/local/share/chruby/chruby.sh' mode=755
+

@@ -1,0 +1,4 @@
+---
+- name: install image magic
+  sudo: True
+  apt: pkg=libmagickwand-dev

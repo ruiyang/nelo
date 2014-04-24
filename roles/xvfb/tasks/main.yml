@@ -1,0 +1,26 @@
+---
+- name: install xvfb font dependencies
+  sudo: True
+  apt: pkg={{ item }}
+  with_items:
+    - xfonts-100dpi
+    - xfonts-75dpi
+    - xfonts-scalable
+    - xfonts-cyrillic
+    - x-ttcidfont-conf
+
+- name: install xvfb
+  sudo: True
+  apt: pkg="xvfb"
+
+- name: copy xvfb service init file
+  sudo: True
+  template: src=../files/Xvfb dest=/etc/init.d/Xvfb  mode=555
+
+- name: config xvfb service
+  sudo: True
+  shell: update-rc.d Xvfb defaults
+
+- name: start xvfb service
+  sudo: True
+  command: service Xvfb start

@@ -1,0 +1,40 @@
+---
+
+- name: Download debian file
+  get_url: url=$go_agent_package_url force=no dest=/tmp/go-agent-{{ go_version }}.deb
+
+- name: Install Agent
+  sudo: True
+  command: dpkg -i /tmp/go-agent-{{ go_version }}.deb
+
+- name: Config Agent - go server
+  sudo: True
+  lineinfile: dest=/etc/default/go-agent regexp="GO_SERVER={{ go_server }}" line="GO_SERVER={{ go_server }}" state=present
+
+- name: Config Agent - add the xvfb display device in default/go-agent
+  sudo: True
+  lineinfile: dest=/etc/default/go-agent regexp="export DISPLAY=:{{ xvfb_display_number }}" line="export DISPLAY=:{{ xvfb_display_number }}" state=present insertafter=EOF
+
+- name: Config xvfb display device - add source chruby
+  sudo: True
+  lineinfile: dest=/etc/default/go-agent regexp='source /usr/local/share/chruby/chruby.sh'  line='source /usr/local/share/chruby/chruby.sh' state=present insertafter=EOF
+
+- name: Config go agent ssh - create .ssh folder
+  sudo: True
+  command: mkdir -p /var/go/.ssh
+
+- name: Config go agent ssh - install deploy key
+  sudo: True
+  copy: src=../files/github_deploy_id dest=/var/go/.ssh/liveaccounts_github_deploy_id owner=go  mode=600 group=go
+
+- name: Config go agent ssh - copy .ssh/config
+  sudo: True
+  template: src=../files/ssh_config dest=/var/go/.ssh/config owner=go group=go mode=600
+
+- name: Add go server to go agent host file
+  sudo: True
+  lineinfile: dest=/etc/hosts regexp='aumellamstr01.myob.myobcorp.net' line='10.60.4.19 aumellamstr01.myob.myobcorp.net'
+
+- name: Start Agent
+  sudo: True
+  service: name=go-agent state=restarted

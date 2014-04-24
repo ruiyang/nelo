@@ -1,0 +1,4 @@
+Host la.github
+Hostname github.com
+IdentityFile ~/.ssh/liveaccounts_github_deploy_id
+StrictHostKeyChecking no

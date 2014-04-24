@@ -1,0 +1,6 @@
+- name: Set Time Zone
+  sudo: True
+  copy: content='Australia/Melbourne' dest=/etc/timezone owner=root group=root mode=0644 backup=yes
+- name: update timezone
+  sudo: True
+  command: dpkg-reconfigure --frontend noninteractive tzdata

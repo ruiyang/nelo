@@ -1,0 +1,9 @@
+---
+
+- name: install python-pip
+  sudo: True
+  apt: pkg=python-pip
+
+- name: install ansible using pip
+  sudo: True
+  command: pip install paramiko PyYAML jinja2 boto ansible

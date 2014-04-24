@@ -1,0 +1,19 @@
+---
+  - name: create sql server instance
+    local_action:
+      module: ec2
+      keypair: ladevs
+      instance_type: "{{ instance_type }}"
+      image: ami-27f56a1d
+      wait: yes
+      vpc_subnet_id: "{{ subnet_id }}"
+      group_id: "{{ security_group_id }}"
+      count: 1
+    register: ec2
+
+  - debug: msg="ID is {{ ec2.instances[0] }}"
+  - debug: msg="ID is {{ ec2.instances[0].id }}"
+  - debug: msg="Private IP is {{ ec2.instances[0].private_ip }}"
+
+  - name: add host
+    local_action: add_host hostname={{ ec2.instances[0].private_ip }} groups={{ group_name }}

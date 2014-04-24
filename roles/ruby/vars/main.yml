@@ -1,0 +1,3 @@
+---
+  ruby_full_version: "{{ ruby_version }}-{{ patch_number }}"
+  ruby_url: http://ftp.ruby-lang.org/pub/ruby/ruby-{{ ruby_full_version }}.tar.gz

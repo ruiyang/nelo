@@ -1,0 +1,8 @@
+---
+- name: download jce jars - US_export_policy
+  sudo: True
+  get_url: url={{ JCE_US_EXPORT_POLICY }} dest=/usr/lib/jvm/java-6-oracle/jre/lib/security/US_export_policy.jar force=yes
+
+- name: download jce jars - local_policy
+  sudo: True
+  get_url: url={{ JCE_LOCAL_POLICY }} dest=/usr/lib/jvm/java-6-oracle/jre/lib/security/local_policy.jar force=yes

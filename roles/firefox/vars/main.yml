@@ -1,0 +1,4 @@
+---
+  firefox_version: 8.0.1
+  firefox_url: https://ftp.mozilla.org/pub/mozilla.org/firefox/releases/8.0.1/linux-x86_64/en-US/firefox-{{ firefox_version }}.tar.bz2
+  firefox_target_folder: /usr/local/share/firefox-{{ firefox_version }}

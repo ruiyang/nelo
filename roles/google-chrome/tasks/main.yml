@@ -1,0 +1,12 @@
+---
+- name: add google ppa
+  sudo: True
+  apt_repository: repo='deb http://dl.google.com/linux/chrome/deb/ stable main'
+
+- name: add ppa key
+  sudo: True
+  apt_key: url='https://dl-ssl.google.com/linux/linux_signing_key.pub'
+
+- name: install google chrome
+  sudo: True
+  apt: pkg="google-chrome-stable" force=yes

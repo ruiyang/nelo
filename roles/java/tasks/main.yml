@@ -1,0 +1,27 @@
+- name: install libxtst6. required by awt
+  sudo: True
+  apt: pkg="libxtst6"
+
+- name: add remote repo
+  sudo: True
+  apt_repository: repo='deb http://ppa.launchpad.net/webupd8team/java/ubuntu precise main'
+
+- name: add ppa key
+  sudo: True
+  apt_key: id=EEA14886 url='http://keyserver.ubuntu.com/pks/lookup?op=get&search=0xC2518248EEA14886'
+
+- name: workaround java license checking 1
+  sudo: True
+  shell: echo debconf shared/accepted-oracle-license-v1-1 select true | debconf-set-selections
+
+- name: workaround java license checking 2
+  sudo: True
+  shell: echo debconf shared/accepted-oracle-license-v1-1 seen true | debconf-set-selections
+
+- name: install java 6
+  sudo: True
+  apt: update_cache=yes pkg="oracle-java6-installer"
+
+- name: set java_home
+  sudo: True
+  lineinfile: create=yes dest=/etc/environment regexp='^JAVA_HOME'  line='JAVA_HOME=/usr/lib/jvm/java-6-oracle'

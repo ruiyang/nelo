@@ -1,0 +1,88 @@
+---
+  # - name: install firefox
+  #   sudo: True
+  #   apt: package=firefox
+- name: download dependencies
+  sudo: True
+  apt: pkg={{ item }}
+  with_items:
+    - aptdaemon
+    - consolekit
+    - firefox
+    - hicolor-icon-theme
+    - libasound2
+    - libatk1.0-0
+    - libatk1.0-data
+    - libavahi-client3
+    - libavahi-common-data
+    - libavahi-common3
+    - libcairo2
+    - libcanberra0
+    - libck-connector0
+    - libcups2
+    - libdatrie1
+    - libdbusmenu-glib4
+    - libdbusmenu-gtk4
+    - libgdk-pixbuf2.0-0
+    - libgdk-pixbuf2.0-common
+    - libgtk2.0-0
+    - libgtk2.0-bin
+    - libgtk2.0-common
+    - libjasper1
+    - libjpeg-turbo8
+    - libjpeg8
+    - libltdl7
+    - libogg0
+    - libpam-ck-connector
+    - libpango1.0-0
+    - libpolkit-agent-1-0
+    - libpolkit-backend-1-0
+    - libstartup-notification0
+    - libtdb1
+    - libthai-data
+    - libthai0
+    - libtiff4
+    - libvorbis0a
+    - libvorbisfile3
+    - libx11-xcb1
+    - libxcb-render0
+    - libxcb-shm0
+    - libxcb-util0
+    - libxcomposite1
+    - libxcursor1
+    - libxdamage1
+    - libxfixes3
+    - libxft2
+    - libxi6
+    - libxinerama1
+    - libxrandr2
+    - libxrender1
+    - policykit-1
+    - python-aptdaemon
+    - python-defer
+    - shared-mime-info
+    - sound-theme-freedesktop
+    - xul-ext-ubufox
+
+- name: Download firefox
+  get_url: url={{ firefox_url }} dest=/tmp/firefox-{{ firefox_version }}.tar.bz2
+
+
+- name: Create target folder
+  sudo: True
+  command: mkdir -p {{ firefox_target_folder }}
+
+
+- name: Extract firefox
+  sudo: True
+  command: tar -xvjf /tmp/firefox-{{ firefox_version }}.tar.bz2 -C {{ firefox_target_folder }}
+
+
+- name: Create link for firefox
+  command: $item chdir=/usr/local/share
+  sudo: True
+  with_items:
+    - rm -rf /usr/local/share/firefox  /usr/local/bin/firefox /usr/bin/firefox
+    - ln -s {{ firefox_target_folder }}/firefox/firefox /usr/local/share/firefox
+    - sudo ln -s {{ firefox_target_folder }}/firefox/firefox /usr/local/bin/firefox
+    - sudo ln -s {{ firefox_target_folder }}/firefox/firefox /usr/bin/firefox

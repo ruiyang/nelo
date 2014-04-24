@@ -1,0 +1,4 @@
+---
+  go_version: 13.3.1-18130
+  go_agent_package_url: http://download01.thoughtworks.com/go/13.3.1/ga/go-agent-{{go_version}}.deb
+  go_server: aumellamstr01.myob.myobcorp.net

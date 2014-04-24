@@ -1,0 +1,7 @@
+---
+- name: create jenkins slave working space directory
+  sudo: True
+  shell: "{{ item }}"
+  with_items:
+    - mkdir -p /var/jenkins
+    - chown ubuntu:ubuntu /var/jenkins

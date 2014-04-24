@@ -1,0 +1,59 @@
+---
+
+- name: download exuberant ctags
+  sudo: True
+  get_url: url=http://downloads.sourceforge.net/project/ctags/ctags/5.8/ctags-5.8.tar.gz?&ts=1398224947&use_mirror=aarnet dest=/tmp/ctags58.tar.gz
+
+- name: Extract ctags
+  command: tar -zxf /tmp/ctags58.tar.gz -C /tmp
+
+- name: Make, configure, and install ctags
+  command: $item chdir=/tmp/ctags-5.8
+  sudo: True
+  with_items:
+    - ./configure --prefix=/opt/ctags
+    - make
+    - sudo make install
+    - rm /usr/local/bin/ctags
+    - ln -s /opt/ctags/bin/ctags /usr/local/bin/ctags
+
+- name: download gnu global
+  sudo: True
+  get_url: url=http://tamacom.com/global/global-6.2.12.tar.gz dest=/tmp/global-6.2.12.tar.gz
+
+- name: Extract global
+  command: tar -zxf /tmp/global-6.2.12.tar.gz -C /tmp
+
+- name: Make, configure, and install global
+  command: $item chdir=/tmp/global-6.2.12
+  sudo: True
+  with_items:
+    - ./configure --prefix=/opt/global-6.2.12 --with-exuberant-ctags=/opt/ctags/bin/ctags
+    - make
+    - make install
+    - rm -rf /usr/local/bin/global
+    - ln -s /opt/global-6.2.12/bin/global /usr/local/bin/global
+
+- name: install pip
+  sudo: True
+  apt: pkg=python-pip
+
+- name: pip install pygments plugin
+  sudo: True
+  shell: pip install pygments
+
+- name: clone global-pygments-plugin git
+  git: repo=https://github.com/yoshizow/global-pygments-plugin.git
+       dest=/tmp/global-pygments-plugin
+
+- name: install global-pygments-plugin
+  command: $item chdir=/tmp/global-pygments-plugin
+  with_items:
+    - chmod +x ./reconf.sh
+    - ./reconf.sh
+    - ./configure --prefix=/opt/global-6.2.12 --with-exuberant-ctags=/opt/ctags/bin/ctags
+    - make
+    - make install
+
+- name: config globalrc to use pygments
+  copy: src=.globalrc dest=~/.globalrc
